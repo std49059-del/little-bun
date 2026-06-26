@@ -1,0 +1,169 @@
+"use client"
+import { useState } from "react"
+
+const shops = [
+ "ก๋วยเตี๋ยวป้าก.ไก่",
+ "เบิ้ลสอง",
+ "ปั่นละมุน",
+ "อร่อยเลิศกับป้ารี",
+ "เด็กอ้วน",
+ "เอกอิ่มอร่อย",
+ "หวานเย็นทุกก้อน",
+ "สุขเต็มชาม",
+ "อ่อนแอ้น",
+ "สถานีของทอด",
+ "ชาบูเสียบไม้ล้าน 9",
+ "ส้มตำคุณนาย",
+ "ก๋วยเตี๋ยวน่องไก่",
+ "ข้าวราดแกง"
+]
+
+const menuData = [
+ { name: "ผัดไทย", price: 50, available: true },
+ { name: "ข้าวผัด", price: 45, available: false },
+ { name: "ก๋วยเตี๋ยว", price: 40, available: true }
+]
+
+export default function Home() {
+ const [language, setLanguage] = useState("TH")
+ const [selectedShop, setSelectedShop] = useState("")
+ const [cart, setCart] = useState<any[]>([])
+ const [eta, setEta] = useState<number | null>(null)
+ const [completed, setCompleted] = useState(false)
+
+ const addToCart = (item:any)=>{
+   setCart([...cart,item])
+ }
+
+ const checkout = ()=>{
+   setEta(15)
+
+   setTimeout(()=>{
+    setCompleted(true)
+   },5000)
+ }
+
+ return (
+  <main className="min-h-screen bg-[#FFF8E7] p-6">
+
+   {/* Header */}
+   <div className="flex justify-between mb-6">
+    <h1 className="text-3xl font-bold text-[#D95D5D]">
+      School Food
+    </h1>
+
+    <div className="flex gap-2">
+      <button onClick={()=>setLanguage("TH")}>TH</button>
+      <button onClick={()=>setLanguage("EN")}>EN</button>
+    </div>
+   </div>
+
+   {/* Location */}
+   <div className="bg-white rounded-xl p-4 shadow mb-6">
+    <h2 className="font-bold mb-3">
+      {language==="TH" ? "เลือกจุดส่งอาหาร" : "Delivery Location"}
+    </h2>
+
+    <select className="w-full border p-3 rounded-lg mb-3">
+      <option>อาคาร 1</option>
+      <option>อาคาร 2</option>
+      <option>อาคาร 3</option>
+      <option>อาคาร 4</option>
+      <option>อาคาร 5</option>
+      <option>อาคาร 6</option>
+      <option>อาคาร 7</option>
+      <option>อาคาร 8</option>
+      <option>อาคาร 9</option>
+      <option>อาคาร 10</option>
+      <option>อาคาร 11</option>
+      <option>สนามฟุตบอล</option>
+    </select>
+
+    <textarea
+     placeholder="รายละเอียดเพิ่มเติม"
+     className="w-full border p-3 rounded-lg"
+    />
+   </div>
+
+   {/* Shops */}
+   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    {shops.map((shop)=>(
+      <button
+       key={shop}
+       onClick={()=>setSelectedShop(shop)}
+       className="bg-white rounded-xl p-4 shadow hover:scale-105"
+      >
+        {shop}
+      </button>
+    ))}
+   </div>
+
+   {/* Menu */}
+   {selectedShop && (
+    <div className="bg-white rounded-xl p-4 mb-6">
+      <h2 className="text-xl font-bold mb-4">{selectedShop}</h2>
+
+      {menuData.map((item)=>(
+        <div
+         key={item.name}
+         className="flex justify-between border-b py-3"
+        >
+          <div>
+            {item.name} - {item.price}฿
+            {!item.available && (
+             <span className="text-gray-400 ml-2">
+               สินค้าหมด
+             </span>
+            )}
+          </div>
+
+          <button
+           disabled={!item.available}
+           onClick={()=>addToCart(item)}
+           className="bg-red-400 text-white px-3 py-1 rounded"
+          >
+            Add
+          </button>
+        </div>
+      ))}
+    </div>
+   )}
+
+   {/* Cart */}
+   <div className="bg-white rounded-xl p-4 mb-6">
+    <h2 className="text-xl font-bold">
+      {language==="TH" ? "ตะกร้า" : "Cart"}
+    </h2>
+
+    {cart.map((item,index)=>(
+      <div key={index}>
+        {item.name} - {item.price}฿
+      </div>
+    ))}
+
+    {cart.length>0 && (
+      <button
+       onClick={checkout}
+       className="mt-4 bg-[#D95D5D] text-white px-4 py-2 rounded"
+      >
+       Checkout
+      </button>
+    )}
+   </div>
+
+   {/* Tracking */}
+   {eta && !completed && (
+    <div className="bg-yellow-100 rounded-xl p-4">
+      อีก {eta} นาทีอาหารจะถึงมือคุณ
+    </div>
+   )}
+
+   {completed && (
+    <div className="bg-green-100 rounded-xl p-4 text-xl font-bold">
+      การส่งเสร็จสิ้นแล้ว
+    </div>
+   )}
+
+  </main>
+ )
+}
