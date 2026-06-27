@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Food Ordering</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS VARIABLES & THEME --- */
+        :root {
+            --primary-yellow: #F2C94C;
+            --soft-red: #D95D5D;
+            --cream-bg: #FFF8E7;
+            --dark-text: #333333;
+            --white: #ffffff;
+            --gray-light: #f4f4f4;
+            --gray-text: #777777;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            --radius: 12px;
+        }
+
+        /* --- GLOBAL STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', 'Sarabun', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--cream-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 700;
+            border-left: 5px solid var(--soft-red);
+            padding-left: 10px;
+        }
+
+        /* --- STICKY NAVIGATION --- */
+        header {
+            position: sticky;
+            top: 0;
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--soft-red);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--primary-yellow);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .nav-menu a:hover {
+            color: var(--soft-red);
+        }
+
+        .lang-btn {
+            background-color: var(--primary-yellow);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--dark-text);
+            transition: var(--transition);
+        }
+
+        .lang-btn:hover {
+            background-color: var(--soft-red);
+            color: var(--white);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-yellow) 0%, #f39c12 100%);
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--dark-text);
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* --- LOCATION PINNING --- */
+        .section-card {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--gray-light);
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: var(--white);
+            color: var(--dark-text);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-yellow);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            height: 80px;
+        }
+
+        /* --- SHOPS GRID --- */
+        .shops-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .shop-card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .shop-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.12);
+        }
+
+        .shop-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background-color: #eee;
+        }
+
+        .shop-info {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .shop-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            min-height: 54px;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background-color: var(--soft-red);
+            color: var(--white);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn-primary:hover {
+            background-color: #c0392b;
+        }
+
+        /* --- DYNAMIC MENU MODAL --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            max-width: 600px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalFade 0.3s ease;
+        }
+
+        @keyframes modalFade {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .close-modal {
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--gray-text);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .menu-item-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: var(--white);
+        }
+
+        .menu-item-card.out-of-stock {
+            background-color: #fafafa;
+            opacity: 0.7;
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .status-badge {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: normal;
+        }
+
+        .status-available { background-color: #d4edda; color: #155724; }
+        .status-outofstock { background-color: #e2e3e5; color: #383d41; }
+
+        .customization {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #eee;
+            font-size: 14px;
+        }
+
+        .custom-group {
+            margin-bottom: 8px;
+        }
+
+        .custom-group label {
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .custom-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
+        .btn-add-cart {
+            margin-top: 10px;
+            background-color: var(--primary-yellow);
+            color: var(--dark-text);
+        }
+        .btn-add-cart:hover {
+            background-color: #e2b632;
+        }
+        .btn-add-cart:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* --- MULTI-SHOP CART --- */
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .cart-table th, .cart-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .cart-table th {
+            background-color: #fff9ed;
+        }
+
+        .cart-total {
+            text-align: right;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: var(--soft-red);
+        }
+
+        .btn-checkout {
+            margin-top: 15px;
+            font-size: 18px;
+            padding: 12px;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* --- ORDER TRACKING --- */
+        .tracking-box {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .tracking-status-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--soft-red);
+            margin-bottom: 10px;
+        }
+
+        .tracking-timer {
+            font-size: 16px;
+            color: var(--gray-text);
+            margin-bottom: 25px;
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 40px 0;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            height: 5px;
+            background-color: #ddd;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .progress-line-fill {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            height: 5px;
+            background-color: var(--primary-yellow);
+            width: 0%;
+            z-index: 2;
+            transition: width 0.5s ease;
+        }
+
+        .step {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 25%;
+        }
+
+        .step-dot {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .step.active .step-dot {
+            background-color: var(--primary-yellow);
+            color: var(--dark-text);
+            box-shadow: 0 0 10px rgba(242, 201, 76, 0.6);
+        }
+
+        .step.completed .step-dot {
+            background-color: #2ecc71;
+        }
+
+        .step-label {
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-text);
+        }
+
+        .step.active .step-label {
+            color: var(--dark-text);
+        }
+
+        /* --- RESPONSIVE BREAKPOINTS --- */
+        @media (min-width: 1025px) {
+            .shops-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .shops-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .shops-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero h1 { font-size: 2rem; }
+            .cart-table th:nth-child(2), .cart-table td:nth-child(2) { display: none; } /* ซ่อนชื่อร้านในมือถือเพื่อประหยัดพื้นที่ */
+            .progress-container { flex-direction: column; gap: 20px; align-items: flex-start; padding-left: 30px; }
+            .progress-line { left: 45px; top: 0; width: 5px; height: 100%; }
+            .progress-line-fill { left: 45px; top: 0; width: 5px; height: 0%; }
+            .step { flex-direction: row; gap: 15px; width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            .shops-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">🏫 School <span>Food</span></a>
+            <div class="nav-menu">
+                <a href="#shops-section" data-i18n="nav_shops">ร้านค้า</a>
+                <a href="#cart-section" data-i18n="nav_cart">ตะกร้าสินค้า</a>
+                <button class="lang-btn" id="langToggle">EN</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1 data-i18n="hero_title">School Food Ordering</h1>
+        <p data-i18n="hero_subtitle">อร่อย สดใหม่ ส่งตรงถึงตึกเรียนของคุณ</p>
+    </section>
+
+    <main class="container">
+        
+        <section class="section-card">
+            <h2 data-i18n="title_location">ส่วนเลือกสถานที่จัดส่ง (Location Pinning)</h2>
+            <div class="form-group">
+                <label for="locationSelect" data-i18n="label_building">เลือกอาคาร/สถานที่ :</label>
+                <select id="locationSelect" class="form-control">
+                    </select>
+            </div>
+            <div class="form-group">
+                <label for="locationNotes" data-i18n="label_notes">ข้อความเพิ่มเติม (ระบุรายละเอียด) :</label>
+                <textarea id="locationNotes" class="form-control" data-i18n-placeholder="placeholder_notes" placeholder="เช่น อยู่หน้าห้อง 302, รอใต้ตึก, โทรก่อนถึง"></textarea>
+            </div>
+        </section>
+
+        <section id="shops-section" class="section-card" style="background:transparent; box-shadow:none; padding:0;">
+            <h2 data-i18n="title_shops">ร้านอาหารทั้งหมด (14 Shops)</h2>
+            <div class="shops-grid" id="shopsGrid">
+                </div>
+        </section>
+
+        <section id="cart-section" class="section-card" style="margin-top: 30px;">
+            <h2 data-i18n="title_cart">ตะกร้าสินค้า (Multi-Shop Cart)</h2>
+            <div id="cartEmptyMessage" style="text-align: center; color: var(--gray-text); padding: 20px;" data-i18n="cart_empty">
+                ไม่มีสินค้าในตะกร้าของคุณในขณะนี้
+            </div>
+            <div id="cartContent" style="display: none;">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="th_item">สินค้า</th>
+                            <th data-i18n="th_shop">ร้านค้า</th>
+                            <th data-i18n="th_price">ราคา</th>
+                            <th data-i18n="th_qty">จำนวน</th>
+                            <th data-i18n="th_action">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cartItemsBody">
+                        </tbody>
+                </table>
+                <div class="cart-total">
+                    <span data-i18n="total_label">ราคารวมทั้งหมด:</span> <span id="cartTotalAmount">0</span> ฿
+                </div>
+                <button class="btn-primary btn-checkout" id="checkoutBtn" data-i18n="btn_checkout">สั่งซื้ออาหาร (Checkout)</button>
+            </div>
+        </section>
+
+        <section id="tracking-section" class="section-card tracking-box">
+            <h2 data-i18n="title_tracking">ติดตามออเดอร์ (Order Tracking)</h2>
+            <div id="trackingActive">
+                <div class="tracking-status-text" id="trackingStatusText">Preparing...</div>
+                <div class="tracking-timer" data-i18n="tracking_timer_text">อีก 15 นาทีอาหารจะถึงมือคุณ</div>
+                
+                <div class="progress-container">
+                    <div class="progress-line"></div>
+                    <div class="progress-line-fill" id="progressLineFill"></div>
+                    
+                    <div class="step active" id="step0">
+                        <div class="step-dot">1</div>
+                        <div class="step-label" data-i18n="step_preparing">Preparing</div>
+                    </div>
+                    <div class="step" id="step1">
+                        <div class="step-dot">2</div>
+                        <div class="step-label" data-i18n="step_cooking">Cooking</div>
+                    </div>
+                    <div class="step" id="step2">
+                        <div class="step-dot">3</div>
+                        <div class="step-label" data-i18n="step_delivering">Delivering</div>
+                    </div>
+                    <div class="step" id="step3">
+                        <div class="step-dot">4</div>
+                        <div class="step-label" data-i18n="step_completed">Completed</div>
+                    </div>
+                </div>
+            </div>
+            <div id="trackingDone" style="display: none; padding: 20px;">
+                <div style="font-size: 50px; color: #2ecc71;">🎉</div>
+                <h3 style="font-size: 24px; color: #2ecc71; margin-bottom: 10px;" data-i18n="delivery_done_title">การส่งเสร็จสิ้นแล้ว</h3>
+                <p style="color: var(--gray-text);" data-i18n="delivery_done_desc">(Delivery Completed)</p>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="modal" id="menuModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalShopName">ชื่อร้านค้า</h3>
+                <span class="close-modal" id="closeModal">&times;</span>
+            </div>
+            <div class="modal-body" id="modalMenuBody">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA DICTIONARY FOR TRANSLATION ---
+        const i18n = {
+            th: {
+                nav_shops: "ร้านค้า", nav_cart: "ตะกร้าสินค้า",
+                hero_title: "School Food Ordering", hero_subtitle: "อร่อย สดใหม่ ส่งตรงถึงตึกเรียนของคุณ",
+                title_location: "ส่วนเลือกสถานที่จัดส่ง (Location Pinning)", label_building: "เลือกอาคาร/สถานที่ :",
+                label_notes: "ข้อความเพิ่มเติม (ระบุรายละเอียด) :", placeholder_notes: "เช่น อยู่หน้าห้อง 302, รอใต้ตึก, โทรก่อนถึง",
+                title_shops: "ร้านอาหารทั้งหมด (14 Shops)", title_cart: "ตะกร้าสินค้า (Multi-Shop Cart)",
+                cart_empty: "ไม่มีสินค้าในตะกร้าของคุณในขณะนี้", th_item: "สินค้า", th_shop: "ร้านค้า",
+                th_price: "ราคา", th_qty: "จำนวน", th_action: "จัดการ", total_label: "ราคารวมทั้งหมด:",
+                btn_checkout: "สั่งซื้ออาหาร (Checkout)", title_tracking: "ติดตามออเดอร์ (Order Tracking)",
+                tracking_timer_text: "อีก 15 นาทีอาหารจะถึงมือคุณ", step_preparing: "Preparing",
+                step_cooking: "Cooking", step_delivering: "Delivering", step_completed: "Completed",
+                delivery_done_title: "การส่งเสร็จสิ้นแล้ว", delivery_done_desc: "(Delivery Completed)",
+                btn_select_menu: "เลือกเมนู", label_spicy: "ระดับความเผ็ด:", label_egg: "เพิ่มไข่ดาว (+10 ฿)",
+                label_no_veg: "ไม่ใส่ผัก", label_more_noodle: "เพิ่มเส้น (+10 ฿)", btn_add_to_cart: "เพิ่มลงตะกร้า",
+                txt_available: "พร้อมขาย", txt_outofstock: "หมด", opt_no_spicy: "ไม่เผ็ด", opt_mid_spicy: "กลาง", opt_high_spicy: "เผ็ดมาก",
+                alert_location: "กรุณาเลือกสถานที่จัดส่งก่อนทำการ Checkout!"
+            },
+            en: {
+                nav_shops: "Shops", nav_cart: "Cart",
+                hero_title: "School Food Ordering", hero_subtitle: "Delicious, Fresh, Delivered straight to your building",
+                title_location: "Location Pinning", label_building: "Select Building/Location:",
+                label_notes: "Additional Notes (Details):", placeholder_notes: "e.g., In front of Room 302, under the building",
+                title_shops: "All 14 Shops", title_cart: "Multi-Shop Cart",
+                cart_empty: "Your cart is currently empty", th_item: "Item", th_shop: "Shop",
+                th_price: "Price", th_qty: "Qty", th_action: "Action", total_label: "Grand Total:",
+                btn_checkout: "Checkout Now", title_tracking: "Order Tracking",
+                tracking_timer_text: "Food will arrive in 15 minutes", step_preparing: "Preparing",
+                step_cooking: "Cooking", step_delivering: "Delivering", step_completed: "Completed",
+                delivery_done_title: "Delivery Completed", delivery_done_desc: "Thank you for ordering!",
+                btn_select_menu: "Select Menu", label_spicy: "Spiciness Level:", label_egg: "Add Fried Egg (+10 ฿)",
+                label_no_veg: "No Veggies", label_more_noodle: "Extra Noodles (+10 ฿)", btn_add_to_cart: "Add to Cart",
+                txt_available: "Available", txt_outofstock: "Out of Stock", opt_no_spicy: "None", opt_mid_spicy: "Medium", opt_high_spicy: "High",
+                alert_location: "Please select a delivery location before checking out!"
+            }
+        };
+
+        // --- CORE APPLICATION STATE ---
+        let currentLang = 'th';
+        let cart = [];
+        const locations = ["อาคาร 1", "อาคาร 2", "อาคาร 3", "อาคาร 4", "อาคาร 5", "อาคาร 6", "อาคาร 7", "อาคาร 8", "อาคาร 9", "อาคาร 10", "อาคาร 11", "สนามฟุตบอล"];
+
+        // --- 14 SHOPS DATA DATABASE ---
+        const shopsData = [
+            { id: 1, nameTh: "ก๋วยเตี๋ยวป้าก.ไก่", nameEn: "Pa Kor Kai Noodles" },
+            { id: 2, nameTh: "เบิ้ลสอง", nameEn: "Double Two" },
+            { id: 3, nameTh: "ปั่นละมุน", nameEn: "Smooth Smoothie" },
+            { id: 4, nameTh: "อร่อยเลิศกับป้ารี", nameEn: "Delicious Pa Ree" },
+            { id: 5, nameTh: "เด็กอ้วน", nameEn: "Fat Boy" },
+            { id: 6, nameTh: "เอกอิ่มอร่อย", nameEn: "Ek Im Aroy" },
+            { id: 7, nameTh: "หวานเย็นทุกก้อน", nameEn: "Sweet Ice" },
+            { id: 8, nameTh: "สุขเต็มชาม", nameEn: "Happy Bowl" },
+            { id: 9, nameTh: "อ่อนแอ้น", nameEn: "On-An" },
+            { id: 10, nameTh: "สถานีของทอด", nameEn: "Fried Station" },
+            { id: 11, nameTh: "ชาบูเสียบไม้ล้าน 9", nameEn: "Shabu Skewer Lan 9" },
+            { id: 12, nameTh: "ส้มตำคุณนาย", nameEn: "Madame Somtum" },
+            { id: 13, nameTh: "ก๋วยเตี๋ยวน่องไก่ ราดหน้า ข้าวต้ม", nameEn: "Chicken Drumstick Noodles & Rad Na" },
+            { id: 14, nameTh: "ข้าวราดแกง ไข่เจียวบุฟเฟ่ต์ สปาเก็ตตี้", nameEn: "Curry Rice & Omelet Buffet" }
+        ];
+
+        // Mock Menu Generator for each shop
+        const baseMenus = [
+            { id: 101, nameTh: "เมนูซิกเนเจอร์จานหลัก", nameEn: "Signature Main Dish", price: 45, available: true },
+            { id: 102, nameTh: "เมนูพิเศษยอดนิยม", nameEn: "Popular Special Menu", price: 55, available: true },
+            { id: 103, nameTh: "เมนูขายดีประจำวัน (หมด)", nameEn: "Daily Best Seller (Out of stock)", price: 40, available: false }
+        ];
+
+        // --- DOM INITIALIZATION ---
+        document.addEventListener("DOMContentLoaded", () => {
+            initLocationDropdown();
+            renderShops();
+            setupEventListeners();
+            updateLanguageDOM();
+        });
+
+        // Initialize location options
+        function initLocationDropdown() {
+            const select = document.getElementById("locationSelect");
+            select.innerHTML = `<option value="" disabled selected>-- เลือกสถานที่ / Select Location --</option>`;
+            locations.forEach(loc => {
+                const opt = document.createElement("option");
+                opt.value = loc;
+                opt.textContent = loc;
+                select.appendChild(opt);
+            });
+        }
+
+        // Setup Application Wide Event Listeners
+        function setupEventListeners() {
+            // Language Switcher
+            document.getElementById("langToggle").addEventListener("click", () => {
+                currentLang = currentLang === 'th' ? 'en' : 'th';
+                document.getElementById("langToggle").textContent = currentLang === 'th' ? 'EN' : 'TH';
+                updateLanguageDOM();
+                renderShops();
+                renderCart();
+            });
+
+            // Close Modal
+            document.getElementById("closeModal").addEventListener("click", () => {
+                document.getElementById("menuModal").style.display = "none";
+            });
+
+            // Checkout Event
+            document.getElementById("checkoutBtn").addEventListener("click", runCheckoutSimulation);
+        }
+
+        // Translate Text Content of Dom dynamically
+        function updateLanguageDOM() {
+            document.querySelectorAll("[data-i18n]").forEach(elem => {
+                const key = elem.getAttribute("data-i18n");
+                if(i18n[currentLang][key]) {
+                    elem.textContent = i18n[currentLang][key];
+                }
+            });
+
+            document.querySelectorAll("[data-i18n-placeholder]").forEach(elem => {
+                const key = elem.getAttribute("data-i18n-placeholder");
+                if(i18n[currentLang][key]) {
+                    elem.setAttribute("placeholder", i18n[currentLang][key]);
+                }
+            });
+        }
+
+        // --- RENDER SHOPS ---
+        function renderShops() {
+            const grid = document.getElementById("shopsGrid");
+            grid.innerHTML = "";
+
+            shopsData.forEach(shop => {
+                const name = currentLang === 'th' ? shop.nameTh : shop.nameEn;
+                const btnText = i18n[currentLang].btn_select_menu;
+                
+                const card = document.createElement("div");
+                card.className = "shop-card";
+                card.innerHTML = `
+                    <img src="https://placehold.co/300x200/F2C94C/333333?text=${encodeURIComponent(name)}" alt="${name}" class="shop-img">
+                    <div class="shop-info">
+                        <div class="shop-title">${name}</div>
+                        <button class="btn-primary" onclick="openMenuModal(${shop.id})">${btnText}</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- OPEN DYNAMIC MENU MODAL ---
+        function openMenuModal(shopId) {
+            const shop = shopsData.find(s => s.id === shopId);
+            const shopName = currentLang === 'th' ? shop.nameTh : shop.nameEn;
+            document.getElementById("modalShopName").textContent = shopName;
+
+            const modalBody = document.getElementById("modalMenuBody");
+            modalBody.innerHTML = "";
+
+            baseMenus.forEach(item => {
+                const itemName = currentLang === 'th' ? item.nameTh : item.nameEn;
+                const statusClass = item.available ? 'status-available' : 'status-outofstock';
+                const statusText = item.available ? i18n[currentLang].txt_available : i18n[currentLang].txt_outofstock;
+                const disabledAttr = item.available ? '' : 'disabled';
+                const cardClass = item.available ? 'menu-item-card' : 'menu-item-card out-of-stock';
+
+                const menuCard = document.createElement("div");
+                menuCard.className = cardClass;
+                menuCard.innerHTML = `
+                    <div class="menu-item-header">
+                        <span>${itemName}</span>
+                        <div>
+                            <span style="margin-right:10px;">${item.price} ฿</span>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </div>
+                    </div>
+                    
+                    ${item.available ? `
+                    <div class="customization">
+                        <div class="custom-group">
+                            <label>${i18n[currentLang].label_spicy}</label>
+                            <div class="custom-options">
+                                <label><input type="radio" name="spicy_${item.id}" value="None" checked> ${i18n[currentLang].opt_no_spicy}</label>
+                                <label><input type="radio" name="spicy_${item.id}" value="Medium"> ${i18n[currentLang].opt_mid_spicy}</label>
+                                <label><input type="radio" name="spicy_${item.id}" value="High"> ${i18n[currentLang].opt_high_spicy}</label>
+                            </div>
+                        </div>
+                        <div class="custom-options" style="margin-top:10px;">
+                            <label><input type="checkbox" id="egg_${item.id}"> ${i18n[currentLang].label_egg}</label>
+                            <label><input type="checkbox" id="noveg_${item.id}"> ${i18n[currentLang].label_no_veg}</label>
+                            <label><input type="checkbox" id="noodle_${item.id}"> ${i18n[currentLang].label_more_noodle}</label>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <button class="btn-primary btn-add-cart" ${disabledAttr} onclick="addItemToCart(${shopId}, ${item.id})">
+                        ${i18n[currentLang].btn_add_to_cart}
+                    </button>
+                `;
+                modalBody.appendChild(menuCard);
+            });
+
+            document.getElementById("menuModal").style.display = "flex";
+        }
+
+        // --- CART OPERATIONS ---
+        function addItemToCart(shopId, itemId) {
+            const shop = shopsData.find(s => s.id === shopId);
+            const baseItem = baseMenus.find(m => m.id === itemId);
+
+            // Read Customizations
+            const spicyVal = document.querySelector(`input[name="spicy_${itemId}"]:checked`).value;
+            const addEgg = document.getElementById(`egg_${itemId}`).checked;
+            const noVeg = document.getElementById(`noveg_${itemId}`).checked;
+            const addNoodle = document.getElementById(`noodle_${itemId}`).checked;
+
+            // Calculate exact item price with additions
+            let finalPrice = baseItem.price;
+            let customNotes = [];
+            
+            customNotes.push(`Spicy: ${spicyVal}`);
+            if(addEgg) { finalPrice += 10; customNotes.push("+Egg"); }
+            if(noVeg) { customNotes.push("No Veg"); }
+            if(addNoodle) { finalPrice += 10; customNotes.push("+Noodle"); }
+
+            // Cart Item structure unique creation
+            const cartItem = {
+                cartId: Date.now() + Math.random().toString(36).substr(2, 5),
+                shopTh: shop.nameTh,
+                shopEn: shop.nameEn,
+                nameTh: `${baseItem.nameTh} (${customNotes.join(', ')})`,
+                nameEn: `${baseItem.nameEn} (${customNotes.join(', ')})`,
+                price: finalPrice,
+                quantity: 1
+            };
+
+            cart.push(cartItem);
+            renderCart();
+            document.getElementById("menuModal").style.display = "none";
+            
+            // Auto Smooth Scroll to Cart Section
+            document.getElementById("cart-section").scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function renderCart() {
+            const emptyMsg = document.getElementById("cartEmptyMessage");
+            const content = document.getElementById("cartContent");
+            const tbody = document.getElementById("cartItemsBody");
+
+            if(cart.length === 0) {
+                emptyMsg.style.display = "block";
+                content.style.display = "none";
+                return;
+            }
+
+            emptyMsg.style.display = "none";
+            content.style.display = "block";
+            tbody.innerHTML = "";
+
+            let total = 0;
+            cart.forEach(item => {
+                const name = currentLang === 'th' ? item.nameTh : item.nameEn;
+                const shopName = currentLang === 'th' ? item.shopTh : item.shopEn;
+                total += item.price * item.quantity;
+
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><strong>${name}</strong></td>
+                    <td>${shopName}</td>
+                    <td>${item.price} ฿</td>
+                    <td>${item.quantity}</td>
+                    <td><button class="btn-delete" onclick="removeItemFromCart('${item.cartId}')">&times;</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById("cartTotalAmount").textContent = total;
+        }
+
+        function removeItemFromCart(cartId) {
+            cart = cart.filter(item => item.cartId !== cartId);
+            renderCart();
+        }
+
+        // --- ORDER TRACKING SIMULATION ---
+        function runCheckoutSimulation() {
+            const locSelect = document.getElementById("locationSelect").value;
+            if(!locSelect) {
+                alert(i18n[currentLang].alert_location);
+                document.getElementById("locationSelect").focus();
+                return;
+            }
+
+            // Hide Cart layout, lock and load Tracking section smoothly
+            const trackingSec = document.getElementById("tracking-section");
+            trackingSec.style.display = "block";
+            trackingSec.scrollIntoView({ behavior: 'smooth' });
+
+            document.getElementById("trackingActive").style.display = "block";
+            document.getElementById("trackingDone").style.display = "none";
+
+            // State management array of stages
+            const steps = ["step0", "step1", "step2", "step3"];
+            const statuses = ["Preparing...", "Cooking...", "Delivering...", "Completed"];
+            let currentStep = 0;
+
+            // Reset step UI
+            steps.forEach(s => document.getElementById(s).className = "step");
+            document.getElementById("progressLineFill").style.width = "0%";
+
+            // Simulation loop setup (Faster timeline execution for direct live demo value)
+            document.getElementById("trackingStatusText").textContent = statuses[0];
+            document.getElementById("step0").className = "step active";
+
+            const interval = setInterval(() => {
+                document.getElementById(steps[currentStep]).className = "step completed";
+                currentStep++;
+
+                if(currentStep < steps.length) {
+                    document.getElementById(steps[currentStep]).className = "step active";
+                    document.getElementById("trackingStatusText").textContent = statuses[currentStep];
+                    
+                    // Progress Calculation for line fill UI responsive scaling
+                    let percent = (currentStep / (steps.length - 1)) * 100;
+                    document.getElementById("progressLineFill").style.width = `${percent}%`;
+                } else {
+                    clearInterval(interval);
+                    // Trigger Completed Delivery Interface UI state transition
+                    document.getElementById("progressLineFill").style.width = "100%";
+                    setTimeout(() => {
+                        document.getElementById("trackingActive").style.display = "none";
+                        document.getElementById("trackingDone").style.display = "block";
+                        // Reset dynamic checkout status
+                        cart = [];
+                        renderCart();
+                    }, 800);
+                }
+            }, 3000); // 3 seconds per simulated node pipeline transition
+        }
+    </script>
+</body>
+</html>
