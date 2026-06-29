@@ -31,7 +31,7 @@
             line-height: 1.6;
         }
 
-        /* --- Header & Navigation --- */
+        /* --- Header & Sticky Navigation --- */
         header {
             background-color: var(--white);
             box-shadow: var(--shadow);
@@ -49,43 +49,32 @@
         }
         .logo h1 { font-size: 1.5rem; color: var(--soft-red); font-weight: 700; }
         .nav-actions { display: flex; gap: 10px; align-items: center; }
-        .lang-btn {
-            background-color: var(--primary-yellow);
-            color: var(--dark-text);
-            border: none;
+        
+        .btn-action {
             padding: 8px 16px;
             border-radius: 20px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-        }
-        .lang-btn:hover { background-color: var(--soft-red); color: var(--white); }
-        .logout-btn {
-            background-color: #e74c3c;
-            color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
+        }
+        .lang-btn { background-color: var(--primary-yellow); color: var(--dark-text); }
+        .lang-btn:hover { background-color: var(--soft-red); color: var(--white); }
+        .login-toggle-btn { background-color: var(--dark-text); color: var(--white); }
+        .logout-btn { background-color: #e74c3c; color: white; display: none; }
+
+        /* --- Admin Info Bar --- */
+        .admin-badge-bar {
+            background-color: #27ae60;
+            color: white;
+            text-align: center;
+            padding: 6px;
+            font-size: 0.9rem;
+            font-weight: bold;
             display: none;
         }
 
-        /* --- Login Section --- */
-        .login-container {
-            max-width: 400px;
-            margin: 60px auto;
-            background: var(--white);
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-        }
-        .login-container h2 { text-align: center; margin-bottom: 20px; color: var(--soft-red); }
-        .error-msg { color: var(--soft-red); font-size: 0.9rem; margin-top: 5px; display: none; }
-
-        /* --- Main Content (Hidden until Login) --- */
-        #mainApp { display: none; }
-        
+        /* --- Hero Section --- */
         .hero {
             background: linear-gradient(135deg, var(--primary-yellow) 0%, #fdedb9 100%);
             padding: 40px 20px;
@@ -96,6 +85,7 @@
         }
         .hero h2 { font-size: 2rem; margin-bottom: 10px; }
 
+        /* --- Grid Layout --- */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -106,7 +96,6 @@
         }
         @media (min-width: 992px) { .container { grid-template-columns: 2fr 1fr; } }
 
-        /* --- Panel Blocks --- */
         .card-panel {
             background-color: var(--white);
             padding: 25px;
@@ -122,7 +111,7 @@
         }
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; }
-        select, textarea, input[type="text"], input[type="password"], input[type="email"] {
+        select, textarea, input[type="text"], input[type="password"], input[type="email"], input[type="number"] {
             width: 100%;
             padding: 12px;
             border: 1px solid var(--gray-light);
@@ -162,6 +151,7 @@
             font-weight: 600;
             width: 100%;
             transition: var(--transition);
+            text-align: center;
         }
         .btn:hover { filter: brightness(0.9); }
         .btn-yellow { background-color: var(--primary-yellow); color: var(--dark-text); }
@@ -186,9 +176,9 @@
         .close-modal { font-size: 1.5rem; cursor: pointer; background: none; border: none; }
         .modal-body { padding: 20px; }
 
-        /* --- Menu Items & Customization --- */
+        /* --- Menu Items & Admin Edit Form --- */
         .menu-item { padding: 15px 0; border-bottom: 1px solid var(--gray-light); }
-        .menu-item.out-of-stock { opacity: 0.5; }
+        .menu-item.out-of-stock { opacity: 0.6; }
         .menu-details { display: flex; justify-content: space-between; margin-bottom: 10px; }
         .menu-price { color: var(--soft-red); font-weight: 600; }
         .badge { padding: 2px 6px; font-size: 0.75rem; border-radius: 4px; font-weight: bold; }
@@ -197,6 +187,15 @@
         
         .custom-box { background-color: #fdfaf2; padding: 12px; border-radius: 8px; font-size: 0.9rem; }
         .custom-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 8px 0; }
+        
+        /* แผงแก้ไขสำหรับแอดมิน */
+        .admin-edit-panel {
+            background-color: #edf2f7;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px dashed #cbd5e0;
+        }
 
         /* --- Cart & Tracking --- */
         .cart-panel { position: sticky; top: 90px; }
@@ -219,6 +218,7 @@
         .step.active .step-dot { border-color: var(--primary-yellow); background-color: var(--primary-yellow); }
         .step.completed .step-dot { border-color: var(--soft-red); background-color: var(--soft-red); color: white; }
         .success-box { display: none; background-color: #e6f9ed; color: #27ae60; padding: 20px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 1.2rem; }
+        .error-msg { color: var(--soft-red); font-size: 0.9rem; margin-top: 5px; display: none; text-align: center;}
     </style>
 </head>
 <body>
@@ -229,34 +229,23 @@
                 <h1 data-i18n="logo_text">School Food Ordering</h1>
             </div>
             <div class="nav-actions">
-                <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">EN</button>
-                <button class="logout-btn" id="logoutBtn" onclick="handleLogout()" data-i18n="logout">ออกจากระบบ</button>
+                <button class="btn-action lang-btn" id="langToggleBtn" onclick="toggleLanguage()">EN</button>
+                <button class="btn-action login-toggle-btn" id="loginNavBtn" onclick="openLoginModal()" data-i18n="nav_login">Login (Admin)</button>
+                <button class="btn-action logout-btn" id="logoutBtn" onclick="handleLogout()" data-i18n="logout">Logout</button>
             </div>
         </div>
     </header>
 
-    <section class="login-container" id="loginSection">
-        <h2 data-i18n="login_title">เข้าสู่ระบบสั่งอาหาร</h2>
-        <form id="loginForm" onsubmit="handleLogin(event)">
-            <div class="form-group">
-                <label data-i18n="login_email">อีเมล</label>
-                <input type="email" id="loginEmail" required placeholder="example@sriyapai.ac.th">
-            </div>
-            <div class="form-group">
-                <label data-i18n="login_password">รหัสผ่าน</label>
-                <input type="password" id="loginPassword" required placeholder="••••••••">
-                <p class="error-msg" id="loginError" data-i18n="login_error">อีเมลหรือรหัสผ่านไม่ถูกต้อง!</p>
-            </div>
-            <button type="submit" class="btn btn-yellow" style="width:100%; padding:12px;" data-i18n="login_submit">เข้าสู่ระบบ</button>
-        </form>
+    <div class="admin-badge-bar" id="adminBadgeBar">
+        🔒 Mode: ร้านค้าควบคุม/แก้ไขเมนูอาหารสำเร็จ (Logged in as Store Control)
+    </div>
+
+    <section class="hero">
+        <h2 data-i18n="hero_title">อร่อย มั่นใจ ส่งไวถึงตึกเรียน</h2>
+        <p data-i18n="hero_subtitle">สั่งอาหารจากโรงอาหารโรงเรียนของคุณได้ง่ายๆ ในไม่กี่ขั้นตอน</p>
     </section>
 
     <div id="mainApp">
-        <section class="hero">
-            <h2 data-i18n="hero_title">อร่อย มั่นใจ ส่งไวถึงตึกเรียน</h2>
-            <p data-i18n="hero_subtitle">สั่งอาหารจากโรงอาหารโรงเรียนของคุณได้ง่ายๆ ในไม่กี่ขั้นตอน</p>
-        </section>
-
         <main class="container">
             <div class="main-content">
                 <section class="card-panel">
@@ -310,6 +299,29 @@
         </main>
     </div>
 
+    <div class="modal" id="loginModal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 data-i18n="login_title">เข้าสู่ระบบควบคุมร้านค้า</h3>
+                <button class="close-modal" onclick="closeLoginModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label data-i18n="login_email">อีเมลควบคุม</label>
+                        <input type="email" id="loginEmail" required placeholder="std49059@sriyapai.ac.th">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="login_password">รหัสผ่าน</label>
+                        <input type="password" id="loginPassword" required placeholder="••••••••">
+                        <p class="error-msg" id="loginError" data-i18n="login_error">อีเมลหรือรหัสผ่านไม่ถูกต้อง!</p>
+                    </div>
+                    <button type="submit" class="btn btn-yellow" style="width:100%; padding:12px;" data-i18n="login_submit">เข้าสู่ระบบ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="menuModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -324,14 +336,15 @@
         let currentLang = 'th';
         let cart = [];
         let activeShopId = null;
+        let isAdminLoggedIn = false; // สเตตัสเช็คสิทธิ์ล็อกอินคุมร้านค้า
 
-        // คลังคำแปลภาษา
+        // พจนานุกรมแปลภาษาคีย์หลัก
         const translations = {
             th: {
-                app_title: "ระบบสั่งอาหารภายในโรงเรียน", logo_text: "School Food Ordering 🏫", logout: "ออกจากระบบ",
-                login_title: "เข้าสู่ระบบสั่งอาหาร", login_email: "อีเมลบัญชีโรงเรียน", login_password: "รหัสผ่าน",
-                login_submit: "เข้าสู่ระบบ", login_error: "อีเมลหรือรหัสผ่านไม่ถูกต้องสำหรับระบบโรงเรียน!",
-                hero_title: "อร่อย มั่นใจ ส่งไวถึงตึกเรียน", hero_subtitle: "สั่งอาหารจากโรงอาหารได้ง่ายๆ ในไม่กี่ขั้นตอน",
+                app_title: "ระบบสั่งอาหารภายในโรงเรียน", logo_text: "School Food Ordering 🏫", logout: "ออกจากระบบ Admin",
+                nav_login: "Login (คุมร้านค้า)", login_title: "เข้าสู่ระบบคนควบคุมแก้ไขเมนู", login_email: "อีเมล", login_password: "รหัสผ่าน",
+                login_submit: "เข้าสู่ระบบ", login_error: "ข้อมูลการล็อกอินแอดมินร้านค้าไม่ถูกต้อง!",
+                hero_title: "อร่อย มั่นใจ ส่งไวถึงตึกเรียน", hero_subtitle: "สั่งอาหารจากโรงอาหารได้ง่ายๆ ในไม่กี่ขั้นตอนไม่ต้องล็อกอิน",
                 location_title: "ระบุสถานที่จัดส่ง", label_building: "เลือกอาคาร/สถานที่", label_details: "ข้อมูลเพิ่มเติม (ระบุจุดนัดรับ)",
                 placeholder_details: "เช่น อยู่หน้าห้อง 302, รอใต้ตึก, โทรก่อนถึง...", shops_title: "ร้านค้าทั้งหมด (14 ร้าน)",
                 cart_title: "ตะกร้าสินค้าของคุณ", cart_empty: "ไม่มีสินค้าในตะกร้า", cart_total: "ราคารวม:",
@@ -341,23 +354,25 @@
                 available: "พร้อมขาย", out_of_stock: "สินค้าหมด", btn_add_cart: "เพิ่มลงตะกร้า",
                 custom_spice: "ระดับความเผ็ด", spice_none: "ไม่เผ็ด", spice_mid: "กลาง", spice_hot: "เผ็ดมาก",
                 opt_noodle: "เพิ่มเส้น (+฿10)", opt_topping: "เพิ่มเครื่อง (+฿15)", opt_wonton: "เพิ่มเกี๊ยว (+฿10)",
-                opt_rice: "เพิ่มข้าว (+฿10)", opt_extra_side: "เพิ่มกับข้าว (+฿20)"
+                opt_rice: "เพิ่มข้าว (+฿10)", opt_extra_side: "เพิ่มกับข้าว (+฿20)",
+                admin_edit_title: "🛠️ ส่วนควบคุมแก้ไขเมนู (สำหรับร้านค้า)", admin_save: "บันทึกการแก้ไขเมนูนี้"
             },
             en: {
-                app_title: "School Food Ordering", logo_text: "School Food Ordering 🏫", logout: "Logout",
-                login_title: "Sign In To Account", login_email: "School Email Address", login_password: "Password",
-                login_submit: "Login", login_error: "Invalid Email or Password!",
-                hero_title: "Delicious Foods Delivered To Classrooms", hero_subtitle: "Order menu from school canteen in minutes",
-                location_title: "Delivery Location Pinning", label_building: "Select Building", label_details: "Instructions",
-                placeholder_details: "e.g., In front of Room 302, Waiting under the building...", shops_title: "All Shops (14 Shops)",
+                app_title: "School Food Ordering System", logo_text: "School Food Ordering 🏫", logout: "Logout Admin",
+                nav_login: "Login (Shop Admin)", login_title: "Shop Management Login", login_email: "Email Address", login_password: "Password",
+                login_submit: "Login", login_error: "Invalid Admin Email or Password!",
+                hero_title: "Delicious Foods Delivered To Classrooms", hero_subtitle: "Order food from school canteen instantly without login",
+                location_title: "Delivery Location", label_building: "Select Building", label_details: "Instructions",
+                placeholder_details: "e.g., In front of Room 302, Waiting under the building...", shops_title: "All Canteen Shops (14 Shops)",
                 cart_title: "Your Shopping Cart", cart_empty: "Your cart is empty", cart_total: "Grand Total:",
-                btn_checkout: "Checkout & Order", btn_select_menu: "Select Menu", track_title: "Order Tracking",
+                btn_checkout: "Checkout & Place Order", btn_select_menu: "Select Menu", track_title: "Order Tracking",
                 track_timer: "Your food will arrive in 15 minutes", step_prep: "Preparing", step_cook: "Cooking",
                 step_deliv: "Delivering", step_comp: "Completed", delivery_completed: "🎉 Delivery Completed!",
                 available: "Available", out_of_stock: "Out of Stock", btn_add_cart: "Add To Cart",
                 custom_spice: "Spiciness", spice_none: "None", spice_mid: "Medium", spice_hot: "Hot",
                 opt_noodle: "Extra Noodles (+฿10)", opt_topping: "Extra Toppings (+฿15)", opt_wonton: "Add Wontons (+฿10)",
-                opt_rice: "Extra Rice (+฿10)", opt_extra_side: "Extra Side Dish (+฿20)"
+                opt_rice: "Extra Rice (+฿10)", opt_extra_side: "Extra Side Dish (+฿20)",
+                admin_edit_title: "🛠️ Menu Management Dashboard", admin_save: "Save Changes"
             }
         };
 
@@ -370,7 +385,7 @@
             { id: "b11", th: "อาคาร 11", en: "Building 11" }, { id: "fb", th: "สนามฟุตบอล", en: "Football Field" }
         ];
 
-        // กำหนด Type ของร้านค้าเพื่อสลับ UI ตัวเลือก Ontop พิเศษ (noodle = ก๋วยเตี๋ยว, rice = ข้าวราด/ตามสั่ง, general = ทั่วไป/น้ำ)
+        // ฐานข้อมูลประเภทของร้านค้า (noodle = ก๋วยเตี๋ยว, rice = ข้าวราดแกง/ตามสั่ง, general = ทั่วไป/ของหวาน)
         const shopsData = [
             { id: 1, type: "noodle", th: "ก๋วยเตี๋ยวป้าก.ไก่", en: "Pa Kor Kai Noodles" },
             { id: 2, type: "general", th: "เบิ้ลสอง", en: "Double Two" },
@@ -388,45 +403,23 @@
             { id: 14, type: "rice", th: "ข้าวราดแกง ไข่เจียวบุฟเฟ่ต์ สปาเก็ตตี้", en: "Curry Rice & Omelet Buffet" }
         ];
 
-        const mockMenuTemplate = [
-            { id: "m1", nameTh: "เมนูแนะนำพิเศษของร้าน", nameEn: "Recommended Special Dish", price: 40, status: "Available" },
-            { id: "m2", nameTh: "เมนูยอดฮิตประจำโรงเรียน", nameEn: "School Best Seller", price: 50, status: "Available" },
-            { id: "m3", nameTh: "เมนูลับเชฟกระทะเหล็ก (หมด)", nameEn: "Chef Secret Menu (Out)", price: 45, status: "Out of Stock" }
-        ];
+        // จำลองคลังข้อมูลรายการอาหารประจำแต่ละร้าน (สามารถเขียนทับแก้ไขได้จริงบนตัวแปรนี้เมื่อ Admin สั่งแก้ไข)
+        let menuRegistry = {};
+        shopsData.forEach(shop => {
+            menuRegistry[shop.id] = [
+                { id: `m-${shop.id}-1`, nameTh: "เมนูหลักแนะนำประจำร้าน", nameEn: "House Signature Dish", price: 40, status: "Available" },
+                { id: `m-${shop.id}-2`, nameTh: "เมนูพิเศษยอดนิยม", nameEn: "Popular Choice Item", price: 50, status: "Available" },
+                { id: `m-${shop.id}-3`, nameTh: "เมนูพรีเมียมเชฟกระทะเหล็ก", nameEn: "Chef Premium Selection", price: 60, status: "Out of Stock" }
+            ];
+        });
 
-        // --- Authentication Logic ---
-        function handleLogin(e) {
-            if (e) e.preventDefault();
-            const emailInput = document.getElementById('loginEmail').value;
-            const passwordInput = document.getElementById('loginPassword').value;
-            const errorMsg = document.getElementById('loginError');
+        // --- App Initialization ---
+        window.addEventListener('DOMContentLoaded', () => {
+            initLocationDropdown();
+            renderShops();
+            updateLanguageUI();
+        });
 
-            if (emailInput === 'std49059@sriyapai.ac.th' && passwordInput === '1869900778503') {
-                document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('mainApp').style.display = 'block';
-                document.getElementById('logoutBtn').style.display = 'block';
-                errorMsg.style.display = 'none';
-                
-                // โหลดหน้าหลักระบบสั่งอาหาร
-                initLocationDropdown();
-                renderShops();
-                updateLanguageUI();
-            } else {
-                errorMsg.style.display = 'block';
-            }
-        }
-
-        function handleLogout() {
-            document.getElementById('loginSection').style.display = 'block';
-            document.getElementById('mainApp').style.display = 'none';
-            document.getElementById('logoutBtn').style.display = 'none';
-            document.getElementById('loginForm').reset();
-            cart = [];
-            renderCart();
-            document.getElementById('trackingPanel').classList.remove('active');
-        }
-
-        // --- Core Application Logic ---
         function initLocationDropdown() {
             const selectEl = document.getElementById('buildingSelect');
             selectEl.innerHTML = '';
@@ -458,35 +451,43 @@
             });
         }
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'th' ? 'en' : 'th';
-            document.getElementById('langToggleBtn').textContent = currentLang === 'th' ? 'EN' : 'TH';
-            
-            if(document.getElementById('mainApp').style.display === 'block') {
-                const currentSelected = document.getElementById('buildingSelect').value;
-                initLocationDropdown();
-                document.getElementById('buildingSelect').value = currentSelected;
-                renderShops();
-                renderCart();
+        // --- Authentication Actions (สำหรับคนควบคุมแก้ไขระบบร้านค้าเท่านั้น) ---
+        function openLoginModal() { document.getElementById('loginModal').classList.add('active'); }
+        function closeLoginModal() { document.getElementById('loginModal').classList.remove('active'); }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const emailInput = document.getElementById('loginEmail').value;
+            const passwordInput = document.getElementById('loginPassword').value;
+            const errorMsg = document.getElementById('loginError');
+
+            if (emailInput === 'std49059@sriyapai.ac.th' && passwordInput === '1869900778503') {
+                isAdminLoggedIn = true;
+                document.getElementById('adminBadgeBar').style.display = 'block';
+                document.getElementById('logoutBtn').style.display = 'block';
+                document.getElementById('loginNavBtn').style.display = 'none';
+                errorMsg.style.display = 'none';
+                closeLoginModal();
                 if(document.getElementById('menuModal').classList.contains('active')) {
-                    openMenu(activeShopId);
+                    openMenu(activeShopId); // รีโหลดหน้าต่างเมนูให้กลายเป็นโหมดแก้ไขทันที
                 }
+            } else {
+                errorMsg.style.display = 'block';
             }
-            updateLanguageUI();
         }
 
-        function updateLanguageUI() {
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if(translations[currentLang][key]) el.textContent = translations[currentLang][key];
-            });
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-i18n-placeholder');
-                if(translations[currentLang][key]) el.setAttribute('placeholder', translations[currentLang][key]);
-            });
+        function handleLogout() {
+            isAdminLoggedIn = false;
+            document.getElementById('adminBadgeBar').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'none';
+            document.getElementById('loginNavBtn').style.display = 'block';
+            document.getElementById('loginForm').reset();
+            if(document.getElementById('menuModal').classList.contains('active')) {
+                openMenu(activeShopId); // ปรับกลับเป็นโหมดผู้ซื้อปกติ
+            }
         }
 
-        // --- Dynamic Customization Systemตามประเภทร้านค้า ---
+        // --- Menu List / Customization & Administration Control ---
         function openMenu(shopId) {
             activeShopId = shopId;
             const shop = shopsData.find(s => s.id === shopId);
@@ -496,7 +497,9 @@
             const body = document.getElementById('modalMenuBody');
             body.innerHTML = '';
 
-            mockMenuTemplate.forEach(item => {
+            const menus = menuRegistry[shopId];
+
+            menus.forEach((item, index) => {
                 const isAvailable = item.status === 'Available';
                 const itemName = currentLang === 'th' ? item.nameTh : item.nameEn;
                 const statusText = isAvailable ? translations[currentLang].available : translations[currentLang].out_of_stock;
@@ -504,24 +507,46 @@
 
                 const itemDiv = document.createElement('div');
                 itemDiv.className = `menu-item ${isAvailable ? '' : 'out-of-stock'}`;
-                
-                // ตรวจสอบและแสดงผลตัวเลือกตามประเภทของร้านค้า (ก๋วยเตี๋ยว / ข้าว)
-                let customOptionsHTML = '';
+
+                // โครงสร้างตัวเลือกแต่งเพิ่มเติม Ontop แยกชนิดประเภทร้านค้า
+                let ontopHTML = '';
                 if(isAvailable) {
                     if (shop.type === 'noodle') {
-                        customOptionsHTML = `
+                        ontopHTML = `
                             <div class="custom-grid">
                                 <label><input type="checkbox" id="opt1-${item.id}"> ${translations[currentLang].opt_noodle}</label>
                                 <label><input type="checkbox" id="opt2-${item.id}"> ${translations[currentLang].opt_topping}</label>
                                 <label><input type="checkbox" id="opt3-${item.id}"> ${translations[currentLang].opt_wonton}</label>
                             </div>`;
                     } else if (shop.type === 'rice') {
-                        customOptionsHTML = `
+                        ontopHTML = `
                             <div class="custom-grid">
                                 <label><input type="checkbox" id="opt1-${item.id}"> ${translations[currentLang].opt_rice}</label>
                                 <label><input type="checkbox" id="opt2-${item.id}"> ${translations[currentLang].opt_extra_side}</label>
                             </div>`;
                     }
+                }
+
+                // สิทธิ์คนคุมร้าน: แทรกฟอร์มแก้ไขข้อมูลเมนูอาหารหลังล็อกอินสำเร็จ
+                let adminPanelHTML = '';
+                if(isAdminLoggedIn) {
+                    adminPanelHTML = `
+                        <div class="admin-edit-panel">
+                            <strong style="color: #2c3e50; font-size:0.85rem;">${translations[currentLang].admin_edit_panel || translations[currentLang].admin_edit_title}</strong>
+                            <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px; margin-top:5px;">
+                                <input type="text" id="editNameTh-${item.id}" value="${item.nameTh}" placeholder="ชื่อไทย">
+                                <input type="number" id="editPrice-${item.id}" value="${item.price}" placeholder="ราคา">
+                            </div>
+                            <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
+                                <label style="font-size:0.85rem;">
+                                    <input type="checkbox" id="editStatus-${item.id}" ${isAvailable ? 'checked' : ''}> พร้อมจำหน่าย (Available)
+                                </label>
+                                <button class="btn" style="width:auto; padding:4px 10px; font-size:0.8rem; background-color:#2980b9;" onclick="saveMenuEdit('${item.id}', ${index})">
+                                    ${translations[currentLang].admin_save}
+                                </button>
+                            </div>
+                        </div>
+                    `;
                 }
 
                 itemDiv.innerHTML = `
@@ -530,7 +555,8 @@
                             <h4>${itemName} <span class="badge ${badgeClass}">${statusText}</span></h4>
                             <p class="menu-price">฿${item.price}</p>
                         </div>
-                        ${isAvailable ? `
+                        
+                        ${isAvailable && !isAdminLoggedIn ? `
                         <div class="custom-box">
                             <strong>${translations[currentLang].custom_spice}:</strong>
                             <div class="custom-grid">
@@ -538,17 +564,35 @@
                                 <label><input type="radio" name="spice-${item.id}" value="Medium"> ${translations[currentLang].spice_mid}</label>
                                 <label><input type="radio" name="spice-${item.id}" value="Hot"> ${translations[currentLang].spice_hot}</label>
                             </div>
-                            ${customOptionsHTML ? `<strong style="display:block; margin-top:5px;">Ontop Extra:</strong> ${customOptionsHTML}` : ''}
+                            ${ontopHTML ? `<strong style="display:block; margin-top:5px;">Ontop Option:</strong> ${ontopHTML}` : ''}
                             <button class="btn btn-yellow" style="margin-top:10px; padding:6px;" onclick="addToCart('${item.id}', ${shopId})">
                                 ${translations[currentLang].btn_add_cart}
                             </button>
                         </div>
                         ` : ''}
+
+                        ${adminPanelHTML}
                     </div>
                 `;
                 body.appendChild(itemDiv);
             });
+
             document.getElementById('menuModal').classList.add('active');
+        }
+
+        // ฟังก์ชันสั่งบันทึกการแก้ไขข้อมูลของร้านค้า (โดย Admin)
+        function saveMenuEdit(menuId, index) {
+            const newNameTh = document.getElementById(`editNameTh-${menuId}`).value;
+            const newPrice = parseFloat(document.getElementById(`editPrice-${menuId}`).value) || 0;
+            const isChecked = document.getElementById(`editStatus-${menuId}`).checked;
+            
+            // อัปเดตข้อมูลเซฟเข้าโครงสร้างคลังตรงๆ
+            menuRegistry[activeShopId][index].nameTh = newNameTh;
+            menuRegistry[activeShopId][index].price = newPrice;
+            menuRegistry[activeShopId][index].status = isChecked ? 'Available' : 'Out of Stock';
+            
+            alert(currentLang === 'th' ? 'บันทึกความเปลี่ยนแปลงเรียบร้อย!' : 'Saved menu updates successfully!');
+            openMenu(activeShopId); // สั่งวาดอัปเดตหน้าแสดงผลใหม่ในตัว
         }
 
         function closeModal() { document.getElementById('menuModal').classList.remove('active'); }
@@ -556,7 +600,7 @@
         // --- Cart Operations ---
         function addToCart(menuId, shopId) {
             const shop = shopsData.find(s => s.id === shopId);
-            const itemTemplate = mockMenuTemplate.find(m => m.id === menuId);
+            const itemTemplate = menuRegistry[shopId].find(m => m.id === menuId);
             
             const spiceEl = document.querySelector(`input[name="spice-${menuId}"]:checked`);
             const spiceVal = spiceEl ? spiceEl.value : 'None';
@@ -565,7 +609,7 @@
             let customNotes = [];
             if(spiceVal !== 'None') customNotes.push(`Spicy:${spiceVal}`);
 
-            // ดึงค่าการแต่งองค์ทรงเครื่องตามชนิดร้าน
+            // ดึงค่าออปชั่น Ontop เสริมแต่ง
             const o1 = document.getElementById(`opt1-${menuId}`);
             const o2 = document.getElementById(`opt2-${menuId}`);
             const o3 = document.getElementById(`opt3-${menuId}`);
@@ -640,3 +684,64 @@
             totalAmountEl.textContent = total;
             checkoutBtn.disabled = false;
         }
+
+        // --- Multi-Language Framework Switching ---
+        function toggleLanguage() {
+            currentLang = currentLang === 'th' ? 'en' : 'th';
+            document.getElementById('langToggleBtn').textContent = currentLang === 'th' ? 'EN' : 'TH';
+            
+            const currentSelected = document.getElementById('buildingSelect').value;
+            initLocationDropdown();
+            document.getElementById('buildingSelect').value = currentSelected;
+            
+            renderShops();
+            renderCart();
+            updateLanguageUI();
+            if(document.getElementById('menuModal').classList.contains('active')) {
+                openMenu(activeShopId);
+            }
+        }
+
+        function updateLanguageUI() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(translations[currentLang][key]) el.textContent = translations[currentLang][key];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if(translations[currentLang][key]) el.setAttribute('placeholder', translations[currentLang][key]);
+            });
+        }
+
+        // --- Progress Tracking Live Bar Simulation ---
+        function processCheckout() {
+            document.getElementById('checkoutBtn').disabled = true;
+            const trackingPanel = document.getElementById('trackingPanel');
+            trackingPanel.classList.add('active');
+            trackingPanel.scrollIntoView({ behavior: 'smooth' });
+
+            const progressLineFill = document.getElementById('progressLineFill');
+            const steps = [document.getElementById('step1'), document.getElementById('step2'), document.getElementById('step3'), document.getElementById('step4')];
+            const successBox = document.getElementById('successBox');
+            const timerMsg = document.getElementById('timerMsg');
+
+            steps.forEach(s => s.classList.remove('active', 'completed'));
+            successBox.style.display = 'none';
+            timerMsg.style.display = 'block';
+            progressLineFill.style.width = '0%';
+
+            setTimeout(() => { steps[0].classList.add('active'); progressLineFill.style.width = '12.5%'; }, 500);
+            setTimeout(() => { steps[0].classList.replace('active', 'completed'); steps[1].classList.add('active'); progressLineFill.style.width = '37.5%'; }, 3000);
+            setTimeout(() => { steps[1].classList.replace('active', 'completed'); steps[2].classList.add('active'); progressLineFill.style.width = '75%'; }, 6000);
+            setTimeout(() => {
+                steps[2].classList.replace('active', 'completed'); steps[3].classList.add('completed');
+                progressLineFill.style.width = '100%';
+                timerMsg.style.display = 'none';
+                successBox.style.display = 'block';
+                cart = [];
+                renderCart();
+            }, 9000);
+        }
+    </script>
+</body>
+</html>
