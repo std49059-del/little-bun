@@ -3,394 +3,640 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>โปรไฟล์แนะนำตัวของฉัน</title>
-    
+    <title data-i18n="app_title">School Food Ordering</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+    
     <style>
-        /* --- ตั้งค่าพื้นฐาน (Reset & Base Styles) --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Sarabun', 'Segoe UI', sans-serif;
+        /* --- CSS Reset & Variables --- */
+        :root {
+            --primary-yellow: #F2C94C;
+            --soft-red: #D95D5D;
+            --cream-bg: #FFF8E7;
+            --dark-text: #333333;
+            --white: #FFFFFF;
+            --gray-light: #F0F0F0;
+            --gray-dark: #828282;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
         }
 
-        html {
-            scroll-behavior: smooth; /* เลื่อนหน้าจอแบบนุ่มนวล */
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
         body {
-            background-color: #F4F9FF;
-            color: #333333;
+            font-family: 'Sarabun', 'Segoe UI', sans-serif;
+            background-color: var(--cream-bg);
+            color: var(--dark-text);
             line-height: 1.6;
         }
 
-        .container {
-            width: 100%;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        section {
-            padding: 80px 0;
-            border-bottom: 1px solid #E3F2FD;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            color: #0B4088;
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 50px;
-            height: 4px;
-            background-color: #2196F3;
-            margin: 10px auto 0;
-            border-radius: 2px;
-        }
-
-        /* --- แถบเมนูด้านบน (Sticky Navbar) --- */
-        .navbar {
+        /* --- Header & Navigation --- */
+        header {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
             position: sticky;
             top: 0;
-            background-color: #FFFFFF;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             z-index: 1000;
         }
-
         .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px;
+            padding: 15px 20px;
         }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #0B4088;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #555555;
+        .logo h1 { font-size: 1.5rem; color: var(--soft-red); font-weight: 700; }
+        .nav-actions { display: flex; gap: 10px; align-items: center; }
+        .lang-btn {
+            background-color: var(--primary-yellow);
+            color: var(--dark-text);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
             font-weight: 600;
-            transition: color 0.3s;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .lang-btn:hover { background-color: var(--soft-red); color: var(--white); }
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: none;
         }
 
-        .nav-links a:hover {
-            color: #2196F3;
+        /* --- Login Section --- */
+        .login-container {
+            max-width: 400px;
+            margin: 60px auto;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
         }
+        .login-container h2 { text-align: center; margin-bottom: 20px; color: var(--soft-red); }
+        .error-msg { color: var(--soft-red); font-size: 0.9rem; margin-top: 5px; display: none; }
 
-        /* --- ส่วนหัว (Hero Section) --- */
+        /* --- Main Content (Hidden until Login) --- */
+        #mainApp { display: none; }
+        
         .hero {
-            background: linear-gradient(135deg, #FFFFFF 0%, #E3F2FD 100%);
+            background: linear-gradient(135deg, var(--primary-yellow) 0%, #fdedb9 100%);
+            padding: 40px 20px;
             text-align: center;
-            padding: 100px 0;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            margin-bottom: 30px;
         }
+        .hero h2 { font-size: 2rem; margin-bottom: 10px; }
 
-        .profile-img {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 5px solid #FFFFFF;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-            object-fit: cover;
-            margin-bottom: 20px;
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            color: #0B4088;
-            margin-bottom: 10px;
-        }
-
-        .tagline {
-            font-size: 1.2rem;
-            color: #2196F3;
-            font-weight: 600;
-        }
-
-        /* --- ส่วนประวัติย่อ (About Me) --- */
-        .about {
-            background-color: #FFFFFF;
-        }
-
-        .about-content {
-            max-width: 700px;
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
-            text-align: center;
-            font-size: 1.1rem;
-            color: #555555;
+            padding: 0 20px 50px 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
         }
+        @media (min-width: 992px) { .container { grid-template-columns: 2fr 1fr; } }
 
-        /* --- ส่วนความสามารถพิเศษ (Skills) --- */
-        .skills-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .skill-bar {
+        /* --- Panel Blocks --- */
+        .card-panel {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
             margin-bottom: 25px;
         }
-
-        .skill-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-weight: 600;
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--soft-red);
+            padding-left: 10px;
         }
-
-        .progress-line {
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; }
+        select, textarea, input[type="text"], input[type="password"], input[type="email"] {
             width: 100%;
-            height: 12px;
-            background-color: #E3F2FD;
-            border-radius: 6px;
+            padding: 12px;
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            background-color: #fafafa;
+        }
+
+        /* --- Responsive Shops Grid --- */
+        .shops-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        @media (max-width: 1199px) { .shops-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 768px) { .shops-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 480px) { .shops-grid { grid-template-columns: 1fr; } }
+
+        .shop-card {
+            background-color: var(--white);
+            border-radius: 12px;
             overflow: hidden;
-        }
-
-        .progress-line span {
-            display: block;
-            height: 100%;
-            background-color: #2196F3;
-            border-radius: 6px;
-            width: 0%; /* เริ่มต้นที่ 0 สำหรับแอนิเมชัน JS */
-            transition: width 1.5s cubic-bezier(0.1, 0.8, 0.3, 1);
-        }
-
-        /* --- ส่วนช่องทางติดต่อ (Contact) --- */
-        .contact {
-            background-color: #FFFFFF;
-            text-align: center;
-        }
-
-        .contact-info {
-            margin-bottom: 30px;
-            font-size: 1.1rem;
-        }
-
-        .contact-info p {
-            margin: 10px 0;
-        }
-
-        .social-links {
+            box-shadow: var(--shadow);
+            transition: var(--transition);
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            flex-direction: column;
         }
+        .shop-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); }
+        .shop-img { width: 100%; height: 140px; object-fit: cover; }
+        .shop-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .shop-name { font-size: 1rem; font-weight: 600; margin-bottom: 15px; height: 48px; }
 
-        .social-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            background-color: #F4F9FF;
-            border-radius: 50%;
-            text-decoration: none;
-            transition: all 0.3s ease;
+        .btn {
+            background-color: var(--soft-red);
+            color: var(--white);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            transition: var(--transition);
         }
+        .btn:hover { filter: brightness(0.9); }
+        .btn-yellow { background-color: var(--primary-yellow); color: var(--dark-text); }
+        .btn-yellow:disabled { background-color: var(--gray-light); color: var(--gray-dark); cursor: not-allowed; }
 
-        .social-icon svg {
-            width: 24px;
-            height: 24px;
-            fill: #2196F3;
-            transition: fill 0.3s ease;
+        /* --- Modal Styles --- */
+        .modal {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5); z-index: 2000;
+            justify-content: center; align-items: center; padding: 20px;
+            backdrop-filter: blur(3px);
         }
-
-        /* Hover Effects สำหรับไอคอนช่องทางติดต่อ */
-        .social-icon:hover {
-            background-color: #2196F3;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        .modal.active { display: flex; }
+        .modal-content {
+            background-color: var(--white); border-radius: 16px;
+            width: 100%; max-width: 600px; max-height: 85vh; overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: modalFade 0.3s ease;
         }
+        @keyframes modalFade { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { padding: 20px; border-bottom: 1px solid var(--gray-light); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white; }
+        .close-modal { font-size: 1.5rem; cursor: pointer; background: none; border: none; }
+        .modal-body { padding: 20px; }
 
-        .social-icon:hover svg {
-            fill: #FFFFFF;
-        }
+        /* --- Menu Items & Customization --- */
+        .menu-item { padding: 15px 0; border-bottom: 1px solid var(--gray-light); }
+        .menu-item.out-of-stock { opacity: 0.5; }
+        .menu-details { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .menu-price { color: var(--soft-red); font-weight: 600; }
+        .badge { padding: 2px 6px; font-size: 0.75rem; border-radius: 4px; font-weight: bold; }
+        .badge.bg-red { background-color: #ffeaea; color: var(--soft-red); }
+        .badge.bg-green { background-color: #e6f9ed; color: #27ae60; }
+        
+        .custom-box { background-color: #fdfaf2; padding: 12px; border-radius: 8px; font-size: 0.9rem; }
+        .custom-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 8px 0; }
 
-        /* Footer */
-        footer {
-            background-color: #0B4088;
-            color: #FFFFFF;
-            text-align: center;
-            padding: 20px 0;
-            font-size: 0.9rem;
-        }
-
-        /* --- การรองรับหน้าจอมือถือ (Responsive Design) --- */
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                height: auto;
-                padding: 15px 0;
-                gap: 10px;
-            }
-
-            .nav-links {
-                gap: 15px;
-            }
-
-            section {
-                padding: 60px 0;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero .profile-img {
-                width: 160px;
-                height: 160px;
-            }
-        }
+        /* --- Cart & Tracking --- */
+        .cart-panel { position: sticky; top: 90px; }
+        .cart-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--gray-light); font-size: 0.95rem; }
+        .cart-item-shop { font-size: 0.75rem; color: var(--gray-dark); display: block; }
+        .cart-item-customs { font-size: 0.8rem; color: #7f8c8d; display: block; }
+        .delete-btn { background: none; border: none; color: var(--soft-red); cursor: pointer; text-decoration: underline; font-size: 0.85rem; }
+        .total-price { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700; margin: 20px 0; padding-top: 10px; border-top: 2px dashed var(--gray-light); }
+        
+        .tracking-panel { display: none; background-color: var(--white); padding: 25px; border-radius: 16px; margin-top: 25px; border: 2px solid var(--primary-yellow); }
+        .tracking-panel.active { display: block; }
+        .timer-msg { font-size: 1.1rem; font-weight: 600; color: var(--soft-red); text-align: center; margin-bottom: 20px; }
+        
+        /* Progress Bar */
+        .progress-container { display: flex; justify-content: space-between; position: relative; margin-bottom: 20px; }
+        .progress-line { position: absolute; top: 15px; left: 0; height: 4px; background-color: var(--gray-light); width: 100%; z-index: 1; }
+        .progress-line-fill { position: absolute; top: 15px; left: 0; height: 4px; background-color: var(--primary-yellow); width: 0%; z-index: 2; transition: width 1s linear; }
+        .step { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; font-size: 0.8rem; font-weight: 600; color: var(--gray-dark); width: 25%; }
+        .step-dot { width: 34px; height: 34px; border-radius: 50%; background-color: var(--white); border: 3px solid var(--gray-light); display: flex; justify-content: center; align-items: center; margin-bottom: 8px; }
+        .step.active .step-dot { border-color: var(--primary-yellow); background-color: var(--primary-yellow); }
+        .step.completed .step-dot { border-color: var(--soft-red); background-color: var(--soft-red); color: white; }
+        .success-box { display: none; background-color: #e6f9ed; color: #27ae60; padding: 20px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="#hero" class="logo">MyPortfolio</a>
-            <ul class="nav-links">
-                <li><a href="#about">ประวัติย่อ</a></li>
-                <li><a href="#skills">ทักษะ</a></li>
-                <li><a href="#contact">ติดต่อ</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <header id="hero" class="hero">
-        <div class="container">
-            <img src="https://placehold.co/200x200/2196F3/FFFFFF?text=Profile" alt="รูปโปรไฟล์" class="profile-img">
-            <h1>สมชาย รักดี</h1>
-            <p class="tagline">Frontend Developer & UI/UX Designer</p>
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <h1 data-i18n="logo_text">School Food Ordering</h1>
+            </div>
+            <div class="nav-actions">
+                <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">EN</button>
+                <button class="logout-btn" id="logoutBtn" onclick="handleLogout()" data-i18n="logout">ออกจากระบบ</button>
+            </div>
         </div>
     </header>
 
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">ประวัติย่อ</h2>
-            <div class="about-content">
-                <p>สวัสดีครับ ผมเป็นนักพัฒนาเว็บไซต์รุ่นใหม่ที่หลงใหลในการออกแบบและเขียนโค้ดเพื่อสร้างสรรค์ประสบการณ์ดิจิทัลที่ใช้งานง่ายและสวยงาม ผมมีความเชี่ยวชาญในการเปลี่ยนไอเดียให้กลายเป็นหน้าเว็บที่ตอบโจทย์ผู้ใช้งานจริง ปัจจุบันกำลังมุ่งมั่นเรียนรู้เทคโนโลยีใหม่ๆ เพื่อพัฒนาตนเองสู่การเป็น Full-Stack Developer ในอนาคตและพร้อมที่จะร่วมงานสร้างสรรค์โปรเจกต์ที่ท้าทายครับ</p>
+    <section class="login-container" id="loginSection">
+        <h2 data-i18n="login_title">เข้าสู่ระบบสั่งอาหาร</h2>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label data-i18n="login_email">อีเมล</label>
+                <input type="email" id="loginEmail" required placeholder="example@sriyapai.ac.th">
             </div>
-        </div>
+            <div class="form-group">
+                <label data-i18n="login_password">รหัสผ่าน</label>
+                <input type="password" id="loginPassword" required placeholder="••••••••">
+                <p class="error-msg" id="loginError" data-i18n="login_error">อีเมลหรือรหัสผ่านไม่ถูกต้อง!</p>
+            </div>
+            <button type="submit" class="btn btn-yellow" style="width:100%; padding:12px;" data-i18n="login_submit">เข้าสู่ระบบ</button>
+        </form>
     </section>
 
-    <section id="skills" class="skills">
-        <div class="container">
-            <h2 class="section-title">ความสามารถพิเศษ</h2>
-            <div class="skills-container">
-                
-                <div class="skill-bar">
-                    <div class="skill-info">
-                        <span>HTML / CSS</span>
-                        <span>90%</span>
-                    </div>
-                    <div class="progress-line">
-                        <span class="progress" data-width="90%"></span>
-                    </div>
-                </div>
+    <div id="mainApp">
+        <section class="hero">
+            <h2 data-i18n="hero_title">อร่อย มั่นใจ ส่งไวถึงตึกเรียน</h2>
+            <p data-i18n="hero_subtitle">สั่งอาหารจากโรงอาหารโรงเรียนของคุณได้ง่ายๆ ในไม่กี่ขั้นตอน</p>
+        </section>
 
-                <div class="skill-bar">
-                    <div class="skill-info">
-                        <span>JavaScript</span>
-                        <span>85%</span>
+        <main class="container">
+            <div class="main-content">
+                <section class="card-panel">
+                    <h3 class="section-title" data-i18n="location_title">ระบุสถานที่จัดส่ง</h3>
+                    <div class="form-group">
+                        <label for="buildingSelect" data-i18n="label_building">เลือกอาคาร/สถานที่</label>
+                        <select id="buildingSelect"></select>
                     </div>
-                    <div class="progress-line">
-                        <span class="progress" data-width="85%"></span>
+                    <div class="form-group">
+                        <label for="locationDetails" data-i18n="label_details">ข้อมูลเพิ่มเติม (ระบุจุดนัดรับ)</label>
+                        <textarea id="locationDetails" rows="2" data-i18n-placeholder="placeholder_details" placeholder="เช่น อยู่หน้าห้อง 302..."></textarea>
                     </div>
-                </div>
+                </section>
 
-                <div class="skill-bar">
-                    <div class="skill-info">
-                        <span>Responsive Design</span>
-                        <span>80%</span>
-                    </div>
-                    <div class="progress-line">
-                        <span class="progress" data-width="80%"></span>
-                    </div>
-                </div>
-
-                <div class="skill-bar">
-                    <div class="skill-info">
-                        <span>React.js</span>
-                        <span>75%</span>
-                    </div>
-                    <div class="progress-line">
-                        <span class="progress" data-width="75%"></span>
-                    </div>
-                </div>
-
-                <div class="skill-bar">
-                    <div class="skill-info">
-                        <span>UI/UX Design (Figma)</span>
-                        <span>70%</span>
-                    </div>
-                    <div class="progress-line">
-                        <span class="progress" data-width="70%"></span>
-                    </div>
-                </div>
-
+                <section class="card-panel">
+                    <h3 class="section-title" data-i18n="shops_title">ร้านค้าทั้งหมด (14 ร้าน)</h3>
+                    <div class="shops-grid" id="shopsGrid"></div>
+                </section>
             </div>
+
+            <div class="side-content">
+                <section class="card-panel cart-panel">
+                    <h3 class="section-title" data-i18n="cart_title">ตะกร้าสินค้าของคุณ</h3>
+                    <div id="cartItemsContainer">
+                        <p style="text-align: center; color: var(--gray-dark); padding: 20px 0;" data-i18n="cart_empty">ไม่มีสินค้าในตะกร้า</p>
+                    </div>
+                    
+                    <div class="total-price">
+                        <span data-i18n="cart_total">ราคารวม:</span>
+                        <span>฿<span id="cartTotalAmount">0</span></span>
+                    </div>
+
+                    <button class="btn btn-yellow" id="checkoutBtn" onclick="processCheckout()" disabled data-i18n="btn_checkout">สั่งซื้ออาหาร</button>
+                    
+                    <div class="tracking-panel" id="trackingPanel">
+                        <h3 class="section-title" data-i18n="track_title">ติดตามออเดอร์</h3>
+                        <p class="timer-msg" id="timerMsg" data-i18n="track_timer">อีก 15 นาทีอาหารจะถึงมือคุณ</p>
+                        
+                        <div class="progress-container">
+                            <div class="progress-line"></div>
+                            <div class="progress-line-fill" id="progressLineFill"></div>
+                            <div class="step" id="step1"><div class="step-dot">1</div><span data-i18n="step_prep">Preparing</span></div>
+                            <div class="step" id="step2"><div class="step-dot">2</div><span data-i18n="step_cook">Cooking</span></div>
+                            <div class="step" id="step3"><div class="step-dot">3</div><span data-i18n="step_deliv">Delivering</span></div>
+                            <div class="step" id="step4"><div class="step-dot">4</div><span data-i18n="step_comp">Completed</span></div>
+                        </div>
+                        <div class="success-box" id="successBox" data-i18n="delivery_completed">การส่งเสร็จสิ้นแล้ว</div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal" id="menuModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalShopName">ชื่อร้านค้า</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalMenuBody"></div>
         </div>
-    </section>
-
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">ช่องทางติดต่อ</h2>
-            <div class="contact-info">
-                <p><strong>📧 อีเมล:</strong> somchai.rakdee@email.com</p>
-                <p><strong>📞 เบอร์โทรศัพท์:</strong> 089-123-4567</p>
-            </div>
-            
-            <div class="social-links">
-                <a href="https://facebook.com" target="_blank" class="social-icon" aria-label="Facebook">
-                    <svg viewBox="0 0 24 24"><path d="M9 8H7v3h2v9h3v-9h3l.5-3H12V6c0-.88.39-1 1-1h2V2h-3c-2.9 0-5 1.55-5 4.5V8z"/></svg>
-                </a>
-                <a href="https://github.com" target="_blank" class="social-icon" aria-label="GitHub">
-                    <svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
-                </a>
-                <a href="https://linkedin.com" target="_blank" class="social-icon" aria-label="LinkedIn">
-                    <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <p>&copy; 2026 สมชาย รักดี. All Rights Reserved.</p>
-    </footer>
+    </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // ดึงข้อมูล Progress Bar ทั้งหมดที่มีคลาส .progress
-            const progressBars = document.querySelectorAll('.progress');
-            
-            // วนลูปและดึงค่าจาก data-width เพื่อขยายแถบความสามารถ
-            progressBars.forEach(bar => {
-                const targetWidth = bar.getAttribute('data-width');
-                // ใช้ setTimeout เล็กน้อยเพื่อให้ CSS Transition ทำงานได้อย่างสมบูรณ์หลังโหลดหน้าจอ
-                setTimeout(() => {
-                    bar.style.width = targetWidth;
-                }, 100);
+        let currentLang = 'th';
+        let cart = [];
+        let activeShopId = null;
+
+        // คลังคำแปลภาษา
+        const translations = {
+            th: {
+                app_title: "ระบบสั่งอาหารภายในโรงเรียน", logo_text: "School Food Ordering 🏫", logout: "ออกจากระบบ",
+                login_title: "เข้าสู่ระบบสั่งอาหาร", login_email: "อีเมลบัญชีโรงเรียน", login_password: "รหัสผ่าน",
+                login_submit: "เข้าสู่ระบบ", login_error: "อีเมลหรือรหัสผ่านไม่ถูกต้องสำหรับระบบโรงเรียน!",
+                hero_title: "อร่อย มั่นใจ ส่งไวถึงตึกเรียน", hero_subtitle: "สั่งอาหารจากโรงอาหารได้ง่ายๆ ในไม่กี่ขั้นตอน",
+                location_title: "ระบุสถานที่จัดส่ง", label_building: "เลือกอาคาร/สถานที่", label_details: "ข้อมูลเพิ่มเติม (ระบุจุดนัดรับ)",
+                placeholder_details: "เช่น อยู่หน้าห้อง 302, รอใต้ตึก, โทรก่อนถึง...", shops_title: "ร้านค้าทั้งหมด (14 ร้าน)",
+                cart_title: "ตะกร้าสินค้าของคุณ", cart_empty: "ไม่มีสินค้าในตะกร้า", cart_total: "ราคารวม:",
+                btn_checkout: "ยืนยันการสั่งซื้อ", btn_select_menu: "เลือกเมนู", track_title: "ติดตามสถานะออเดอร์",
+                track_timer: "อีก 15 นาทีอาหารจะถึงมือคุณ", step_prep: "เตรียมอาหาร", step_cook: "กำลังปรุง",
+                step_deliv: "กำลังจัดส่ง", step_comp: "สำเร็จ", delivery_completed: "🎉 การส่งเสร็จสิ้นแล้ว (Delivery Completed)",
+                available: "พร้อมขาย", out_of_stock: "สินค้าหมด", btn_add_cart: "เพิ่มลงตะกร้า",
+                custom_spice: "ระดับความเผ็ด", spice_none: "ไม่เผ็ด", spice_mid: "กลาง", spice_hot: "เผ็ดมาก",
+                opt_noodle: "เพิ่มเส้น (+฿10)", opt_topping: "เพิ่มเครื่อง (+฿15)", opt_wonton: "เพิ่มเกี๊ยว (+฿10)",
+                opt_rice: "เพิ่มข้าว (+฿10)", opt_extra_side: "เพิ่มกับข้าว (+฿20)"
+            },
+            en: {
+                app_title: "School Food Ordering", logo_text: "School Food Ordering 🏫", logout: "Logout",
+                login_title: "Sign In To Account", login_email: "School Email Address", login_password: "Password",
+                login_submit: "Login", login_error: "Invalid Email or Password!",
+                hero_title: "Delicious Foods Delivered To Classrooms", hero_subtitle: "Order menu from school canteen in minutes",
+                location_title: "Delivery Location Pinning", label_building: "Select Building", label_details: "Instructions",
+                placeholder_details: "e.g., In front of Room 302, Waiting under the building...", shops_title: "All Shops (14 Shops)",
+                cart_title: "Your Shopping Cart", cart_empty: "Your cart is empty", cart_total: "Grand Total:",
+                btn_checkout: "Checkout & Order", btn_select_menu: "Select Menu", track_title: "Order Tracking",
+                track_timer: "Your food will arrive in 15 minutes", step_prep: "Preparing", step_cook: "Cooking",
+                step_deliv: "Delivering", step_comp: "Completed", delivery_completed: "🎉 Delivery Completed!",
+                available: "Available", out_of_stock: "Out of Stock", btn_add_cart: "Add To Cart",
+                custom_spice: "Spiciness", spice_none: "None", spice_mid: "Medium", spice_hot: "Hot",
+                opt_noodle: "Extra Noodles (+฿10)", opt_topping: "Extra Toppings (+฿15)", opt_wonton: "Add Wontons (+฿10)",
+                opt_rice: "Extra Rice (+฿10)", opt_extra_side: "Extra Side Dish (+฿20)"
+            }
+        };
+
+        const locationsData = [
+            { id: "b1", th: "อาคาร 1", en: "Building 1" }, { id: "b2", th: "อาคาร 2", en: "Building 2" },
+            { id: "b3", th: "อาคาร 3", en: "Building 3" }, { id: "b4", th: "อาคาร 4", en: "Building 4" },
+            { id: "b5", th: "อาคาร 5", en: "Building 5" }, { id: "b6", th: "อาคาร 6", en: "Building 6" },
+            { id: "b7", th: "อาคาร 7", en: "Building 7" }, { id: "b8", th: "อาคาร 8", en: "Building 8" },
+            { id: "b9", th: "อาคาร 9", en: "Building 9" }, { id: "b10", th: "อาคาร 10", en: "Building 10" },
+            { id: "b11", th: "อาคาร 11", en: "Building 11" }, { id: "fb", th: "สนามฟุตบอล", en: "Football Field" }
+        ];
+
+        // กำหนด Type ของร้านค้าเพื่อสลับ UI ตัวเลือก Ontop พิเศษ (noodle = ก๋วยเตี๋ยว, rice = ข้าวราด/ตามสั่ง, general = ทั่วไป/น้ำ)
+        const shopsData = [
+            { id: 1, type: "noodle", th: "ก๋วยเตี๋ยวป้าก.ไก่", en: "Pa Kor Kai Noodles" },
+            { id: 2, type: "general", th: "เบิ้ลสอง", en: "Double Two" },
+            { id: 3, type: "general", th: "ปั่นละมุน", en: "Smooth Blender" },
+            { id: 4, type: "rice", th: "อร่อยเลิศกับป้ารี", en: "Delicious Pa Ree" },
+            { id: 5, type: "rice", th: "เด็กอ้วน", en: "Chubby Boy" },
+            { id: 6, type: "rice", th: "เอกอิ่มอร่อย", en: "Ek Im Aroy" },
+            { id: 7, type: "general", th: "หวานเย็นทุกก้อน", en: "Sweet Ice Cubes" },
+            { id: 8, type: "noodle", th: "สุขเต็มชาม", en: "Happy Bowl" },
+            { id: 9, type: "general", th: "อ่อนแอ้น", en: "On-An" },
+            { id: 10, type: "general", th: "สถานีของทอด", en: "Fried Station" },
+            { id: 11, type: "general", th: "ชาบูเสียบไม้ล้าน 9", en: "Shabu Skewer Million 9" },
+            { id: 12, type: "rice", th: "ส้มตำคุณนาย", en: "Lady's Somtum" },
+            { id: 13, type: "noodle", th: "ก๋วยเตี๋ยวน่องไก่ ราดหน้า ข้าวต้ม", en: "Chicken Drumstick Noodles & Rad Na" },
+            { id: 14, type: "rice", th: "ข้าวราดแกง ไข่เจียวบุฟเฟ่ต์ สปาเก็ตตี้", en: "Curry Rice & Omelet Buffet" }
+        ];
+
+        const mockMenuTemplate = [
+            { id: "m1", nameTh: "เมนูแนะนำพิเศษของร้าน", nameEn: "Recommended Special Dish", price: 40, status: "Available" },
+            { id: "m2", nameTh: "เมนูยอดฮิตประจำโรงเรียน", nameEn: "School Best Seller", price: 50, status: "Available" },
+            { id: "m3", nameTh: "เมนูลับเชฟกระทะเหล็ก (หมด)", nameEn: "Chef Secret Menu (Out)", price: 45, status: "Out of Stock" }
+        ];
+
+        // --- Authentication Logic ---
+        function handleLogin(e) {
+            if (e) e.preventDefault();
+            const emailInput = document.getElementById('loginEmail').value;
+            const passwordInput = document.getElementById('loginPassword').value;
+            const errorMsg = document.getElementById('loginError');
+
+            if (emailInput === 'std49059@sriyapai.ac.th' && passwordInput === '1869900778503') {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                document.getElementById('logoutBtn').style.display = 'block';
+                errorMsg.style.display = 'none';
+                
+                // โหลดหน้าหลักระบบสั่งอาหาร
+                initLocationDropdown();
+                renderShops();
+                updateLanguageUI();
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        function handleLogout() {
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'none';
+            document.getElementById('loginForm').reset();
+            cart = [];
+            renderCart();
+            document.getElementById('trackingPanel').classList.remove('active');
+        }
+
+        // --- Core Application Logic ---
+        function initLocationDropdown() {
+            const selectEl = document.getElementById('buildingSelect');
+            selectEl.innerHTML = '';
+            locationsData.forEach(loc => {
+                const opt = document.createElement('option');
+                opt.value = loc.id;
+                opt.textContent = currentLang === 'th' ? loc.th : loc.en;
+                selectEl.appendChild(opt);
             });
-        });
-    </script>
-</body>
-</html>
+        }
+
+        function renderShops() {
+            const grid = document.getElementById('shopsGrid');
+            grid.innerHTML = '';
+            shopsData.forEach(shop => {
+                const name = currentLang === 'th' ? shop.th : shop.en;
+                const imgUrl = `https://placehold.co/400x250/F2C94C/333333?text=${encodeURIComponent(name)}`;
+                
+                const card = document.createElement('div');
+                card.className = 'shop-card';
+                card.innerHTML = `
+                    <img src="${imgUrl}" alt="${name}" class="shop-img">
+                    <div class="shop-info">
+                        <div class="shop-name">${name}</div>
+                        <button class="btn" onclick="openMenu(${shop.id})">${translations[currentLang].btn_select_menu}</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'th' ? 'en' : 'th';
+            document.getElementById('langToggleBtn').textContent = currentLang === 'th' ? 'EN' : 'TH';
+            
+            if(document.getElementById('mainApp').style.display === 'block') {
+                const currentSelected = document.getElementById('buildingSelect').value;
+                initLocationDropdown();
+                document.getElementById('buildingSelect').value = currentSelected;
+                renderShops();
+                renderCart();
+                if(document.getElementById('menuModal').classList.contains('active')) {
+                    openMenu(activeShopId);
+                }
+            }
+            updateLanguageUI();
+        }
+
+        function updateLanguageUI() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(translations[currentLang][key]) el.textContent = translations[currentLang][key];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if(translations[currentLang][key]) el.setAttribute('placeholder', translations[currentLang][key]);
+            });
+        }
+
+        // --- Dynamic Customization Systemตามประเภทร้านค้า ---
+        function openMenu(shopId) {
+            activeShopId = shopId;
+            const shop = shopsData.find(s => s.id === shopId);
+            const shopName = currentLang === 'th' ? shop.th : shop.en;
+            
+            document.getElementById('modalShopName').textContent = shopName;
+            const body = document.getElementById('modalMenuBody');
+            body.innerHTML = '';
+
+            mockMenuTemplate.forEach(item => {
+                const isAvailable = item.status === 'Available';
+                const itemName = currentLang === 'th' ? item.nameTh : item.nameEn;
+                const statusText = isAvailable ? translations[currentLang].available : translations[currentLang].out_of_stock;
+                const badgeClass = isAvailable ? 'bg-green' : 'bg-red';
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `menu-item ${isAvailable ? '' : 'out-of-stock'}`;
+                
+                // ตรวจสอบและแสดงผลตัวเลือกตามประเภทของร้านค้า (ก๋วยเตี๋ยว / ข้าว)
+                let customOptionsHTML = '';
+                if(isAvailable) {
+                    if (shop.type === 'noodle') {
+                        customOptionsHTML = `
+                            <div class="custom-grid">
+                                <label><input type="checkbox" id="opt1-${item.id}"> ${translations[currentLang].opt_noodle}</label>
+                                <label><input type="checkbox" id="opt2-${item.id}"> ${translations[currentLang].opt_topping}</label>
+                                <label><input type="checkbox" id="opt3-${item.id}"> ${translations[currentLang].opt_wonton}</label>
+                            </div>`;
+                    } else if (shop.type === 'rice') {
+                        customOptionsHTML = `
+                            <div class="custom-grid">
+                                <label><input type="checkbox" id="opt1-${item.id}"> ${translations[currentLang].opt_rice}</label>
+                                <label><input type="checkbox" id="opt2-${item.id}"> ${translations[currentLang].opt_extra_side}</label>
+                            </div>`;
+                    }
+                }
+
+                itemDiv.innerHTML = `
+                    <div>
+                        <div class="menu-details">
+                            <h4>${itemName} <span class="badge ${badgeClass}">${statusText}</span></h4>
+                            <p class="menu-price">฿${item.price}</p>
+                        </div>
+                        ${isAvailable ? `
+                        <div class="custom-box">
+                            <strong>${translations[currentLang].custom_spice}:</strong>
+                            <div class="custom-grid">
+                                <label><input type="radio" name="spice-${item.id}" value="None" checked> ${translations[currentLang].spice_none}</label>
+                                <label><input type="radio" name="spice-${item.id}" value="Medium"> ${translations[currentLang].spice_mid}</label>
+                                <label><input type="radio" name="spice-${item.id}" value="Hot"> ${translations[currentLang].spice_hot}</label>
+                            </div>
+                            ${customOptionsHTML ? `<strong style="display:block; margin-top:5px;">Ontop Extra:</strong> ${customOptionsHTML}` : ''}
+                            <button class="btn btn-yellow" style="margin-top:10px; padding:6px;" onclick="addToCart('${item.id}', ${shopId})">
+                                ${translations[currentLang].btn_add_cart}
+                            </button>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                body.appendChild(itemDiv);
+            });
+            document.getElementById('menuModal').classList.add('active');
+        }
+
+        function closeModal() { document.getElementById('menuModal').classList.remove('active'); }
+
+        // --- Cart Operations ---
+        function addToCart(menuId, shopId) {
+            const shop = shopsData.find(s => s.id === shopId);
+            const itemTemplate = mockMenuTemplate.find(m => m.id === menuId);
+            
+            const spiceEl = document.querySelector(`input[name="spice-${menuId}"]:checked`);
+            const spiceVal = spiceEl ? spiceEl.value : 'None';
+
+            let finalPrice = itemTemplate.price;
+            let customNotes = [];
+            if(spiceVal !== 'None') customNotes.push(`Spicy:${spiceVal}`);
+
+            // ดึงค่าการแต่งองค์ทรงเครื่องตามชนิดร้าน
+            const o1 = document.getElementById(`opt1-${menuId}`);
+            const o2 = document.getElementById(`opt2-${menuId}`);
+            const o3 = document.getElementById(`opt3-${menuId}`);
+
+            if (shop.type === 'noodle') {
+                if(o1 && o1.checked) { finalPrice += 10; customNotes.push('+เส้น'); }
+                if(o2 && o2.checked) { finalPrice += 15; customNotes.push('+เครื่อง'); }
+                if(o3 && o3.checked) { finalPrice += 10; customNotes.push('+เกี๊ยว'); }
+            } else if (shop.type === 'rice') {
+                if(o1 && o1.checked) { finalPrice += 10; customNotes.push('+ข้าว'); }
+                if(o2 && o2.checked) { finalPrice += 20; customNotes.push('+กับข้าว'); }
+            }
+
+            const customKey = `${menuId}-${spiceVal}-${o1?.checked}-${o2?.checked}-${o3?.checked}`;
+            const existingItem = cart.find(c => c.customKey === customKey);
+
+            if(existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    customKey: customKey, shopTh: shop.th, shopEn: shop.en,
+                    nameTh: itemTemplate.nameTh, nameEn: itemTemplate.nameEn,
+                    price: finalPrice, quantity: 1, notes: customNotes.join(', ')
+                });
+            }
+
+            renderCart();
+            closeModal();
+            document.getElementById('cartItemsContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function removeFromCart(customKey) {
+            cart = cart.filter(c => c.customKey !== customKey);
+            renderCart();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cartItemsContainer');
+            const totalAmountEl = document.getElementById('cartTotalAmount');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            
+            if(cart.length === 0) {
+                container.innerHTML = `<p style="text-align: center; color: var(--gray-dark); padding: 20px 0;" data-i18n="cart_empty">${translations[currentLang].cart_empty}</p>`;
+                totalAmountEl.textContent = '0';
+                checkoutBtn.disabled = true;
+                return;
+            }
+
+            container.innerHTML = '';
+            let total = 0;
+            cart.forEach(item => {
+                const shopName = currentLang === 'th' ? item.shopTh : item.shopEn;
+                const itemName = currentLang === 'th' ? item.nameTh : item.nameEn;
+                const itemSubtotal = item.price * item.quantity;
+                total += itemSubtotal;
+
+                const cartDiv = document.createElement('div');
+                cartDiv.className = 'cart-item';
+                cartDiv.innerHTML = `
+                    <div class="cart-item-info">
+                        <strong>${itemName}</strong> x ${item.quantity}
+                        <span class="cart-item-shop">🏢 ${shopName}</span>
+                        ${item.notes ? `<span class="cart-item-customs">✨ (${item.notes})</span>` : ''}
+                    </div>
+                    <div class="cart-item-actions">
+                        <div>฿${itemSubtotal}</div>
+                        <button class="delete-btn" onclick="removeFromCart('${item.customKey}')">${currentLang === 'th' ? 'ลบออก' : 'Remove'}</button>
+                    </div>
+                `;
+                container.appendChild(cartDiv);
+            });
+            totalAmountEl.textContent = total;
+            checkoutBtn.disabled = false;
+        }
